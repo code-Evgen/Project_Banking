@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Кабинет клиента</title>
+</head>
+<body>
+    <p th:text="'Клиент: ' + ${client.getName}"></p>
+    <div>Карты:</div>
+    <div th:if="${cardsId.isEmpty()}">Оформленных карт нет</div>
+    <div th:if="${!cardsId.isEmpty()}">
+        <div th:each="cardId : ${cardsId}">
+            <a th:text="${cardId}" th:href="@{/cards/{id}(id=${cardId})}"/>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пополнение счета</title>
+</head>
+<body>
+    <div th:text="'Счет: ' + ${card.getId}"/>
+    <div th:text="'Текущий баланс: ' + ${card.getBalance}"/>
+
+    <form th:method="PATCH" th:action="@{/cards/{id}(id=${card.getId})}">
+        <label for="addingAmount">Сумма пополнения</label>
+        <input type="text" id="addingAmount" name="addingAmount">
+        <input type="submit" value="Пополнить">
+    </form>
+
+</body>
+</html>
