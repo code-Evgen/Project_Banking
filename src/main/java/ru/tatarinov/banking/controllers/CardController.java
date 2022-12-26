@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.tatarinov.banking.model.Card;
 import ru.tatarinov.banking.services.CardService;
 
 @Controller
@@ -19,6 +20,7 @@ public class CardController {
     @GetMapping("{id}")
     public String show(@PathVariable("id") int id, Model model){
         model.addAttribute("card",cardService.getCardById(id));
+        model.addAttribute("client", cardService.getClientIdByCardId(id));
         return "/cards/show";
     }
 
@@ -32,5 +34,13 @@ public class CardController {
     public String refill(@PathVariable("id") int id, @RequestParam("addingAmount") float amount){
         cardService.refill(id, amount);
         return ("redirect:/cards/" + id);
+    }
+
+    @PostMapping("/new/{id}")
+    public String addCard(@PathVariable("id") int id, @ModelAttribute("card") Card card){
+        System.out.println("qqq - " + card.getId());
+        System.out.println("qqq - " + card.getBalance());
+        cardService.createCard(id, card);
+        return ("redirect:/clients/" + id);
     }
 }

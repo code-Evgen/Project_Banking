@@ -3,9 +3,8 @@ package ru.tatarinov.banking.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import ru.tatarinov.banking.model.Card;
 import ru.tatarinov.banking.services.CardService;
 import ru.tatarinov.banking.services.ClientService;
 
@@ -22,9 +21,10 @@ public class ClientsController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model){
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("card") Card card){
         model.addAttribute("client", clientService.getClientById(id));
         model.addAttribute("cardsId", cardService.getCardIdByClientId(id));
         return ("clients/show");
     }
+
 }

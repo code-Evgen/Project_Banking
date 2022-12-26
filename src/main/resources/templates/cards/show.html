@@ -11,5 +11,7 @@
     <form method="GET" th:action="@{/cards/{id}/addMoney(id=${card.getId})}">
         <input type="submit" value="Пополнить счет">
     </form>
+
+    <a th:href="@{/clients/{id}(id=${client.getId})}">Назад</a>
 </body>
 </html>

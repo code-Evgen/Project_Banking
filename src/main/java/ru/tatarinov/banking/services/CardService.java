@@ -8,10 +8,7 @@ import ru.tatarinov.banking.model.Client;
 import ru.tatarinov.banking.repositories.CardRepository;
 import ru.tatarinov.banking.repositories.ClientRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,10 +34,19 @@ public class CardService {
             for(Card card : cards){
                 cardsId.add(card.getId());
             }
+            cardsId.sort(Comparator.comparingInt(o -> o));
             return cardsId;
         }
         else
             return Collections.emptyList();
+    }
+
+    public Client getClientIdByCardId(int id){
+        Optional<Card> card = cardRepository.findById(id);
+        if (card.isPresent()){
+            return card.get().getOwner();
+        }
+        return null;
     }
 
     @Transactional
@@ -53,5 +59,16 @@ public class CardService {
             System.out.println(card.getBalance());
         }
         cardRepository.save(card);
+    }
+
+    @Transactional
+    public void createCard(int clientId, Card card){
+        card.setId(0);
+        Optional<Client> client = clientRepository.findById(clientId);
+        if (client.isPresent()){
+            card.setOwner(client.get());
+            System.out.println(card.getId());
+            cardRepository.save(card);
+        }
     }
 }
