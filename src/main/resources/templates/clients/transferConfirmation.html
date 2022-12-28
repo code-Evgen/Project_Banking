@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение перевода денег</title>
+</head>
+<body>
+    <form th:method="PATCH" th:action="@{/clients/{id}/transferProceeding(id=${clientId})}">
+        <div th:text="'Перевод со счета: ' + ${transfer.cardFrom}" ></div>
+        <input th:type="hidden" th:field="${transfer.cardFrom}" >
+
+        <div th:text="'Перевод на счет: ' + ${transfer.cardTo}"></div>
+        <input th:type="hidden" th:field="${transfer.cardTo}">
+
+        <div th:text="'Получатель перевода: ' + ${client.name}"></div>
+        <input th:type="hidden" th:field="${client.name}">
+
+        <div th:text="'Сумма перевода: ' + ${transfer.amount}"></div>
+        <input th:type="hidden" th:field="${transfer.amount}">
+
+        <input type="submit" value="Подтвердить перевод">
+    </form>
+</body>
+</html>

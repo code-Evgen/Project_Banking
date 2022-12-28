@@ -41,7 +41,7 @@ public class CardService {
             return Collections.emptyList();
     }
 
-    public Client getClientIdByCardId(int id){
+    public Client getClientByCardId(int id){
         Optional<Card> card = cardRepository.findById(id);
         if (card.isPresent()){
             return card.get().getOwner();
@@ -63,7 +63,7 @@ public class CardService {
 
     @Transactional
     public void createCard(int clientId, Card card){
-        card.setId(0);
+        //card.setId(0);
         Optional<Client> client = clientRepository.findById(clientId);
         if (client.isPresent()){
             card.setOwner(client.get());
@@ -71,4 +71,23 @@ public class CardService {
             cardRepository.save(card);
         }
     }
+
+    public List<Card> getCardByClientId(int clientId){
+        Optional<Client> client = clientRepository.findById(clientId);
+        if (client.isPresent()){
+            return cardRepository.findAllByOwnerOrderById(client.get());
+        }
+        return null;
+    }
+
+    @Transactional
+    public void proceedTransferring(int cardFromId, int cardToId, int amount){
+        Optional<Card> cardFrom = cardRepository.findById(cardFromId);
+        Optional<Card> cardTo = cardRepository.findById(cardToId);
+        if (cardFrom.isPresent() && cardTo.isPresent()){
+            cardFrom.get().setBalance(cardFrom.get().getBalance() - amount);
+            cardTo.get().setBalance(cardTo.get().getBalance() + amount);
+        }
+    }
+
 }

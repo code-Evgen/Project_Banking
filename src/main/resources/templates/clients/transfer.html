@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Перевод денег</title>
+</head>
+<body>
+<!--    <form th:method="PATCH" th:action="@{/clients/{id}/transferConfirmation(id=${clientId})}">-->
+<!--        <label for="cardFrom">Карта отправления: </label>-->
+<!--        <input th:type="text" th:field="${cardFrom.id}" id="cardFrom">-->
+<!--        <select id="cardFrom" th:field="${cardFrom.id}" >-->
+<!--            <option th:each="card : ${cards}" th:value="${card.getId}" th:text="${card.getId}"></option>-->
+<!--        </select>-->
+<!--        <br>-->
+<!--        <br>-->
+<!--        <label for="cardTo">Карта получателя: </label>-->
+<!--        <input th:type="text" th:field="${transferCard.id}" id="cardTo">-->
+<!--        <br>-->
+<!--        <br>-->
+<!--        <label for="amount">Сумма перевода: </label>-->
+<!--        <input th:type="text" th:field="${transferCard.balance}" id="amount">-->
+<!--        <input type="submit" value="Перевести">-->
+<!--    </form>-->
+
+<form th:method="PATCH" th:action="@{/clients/{id}/transferConfirmation(id=${clientId})}">
+    <label for="cardFrom">Карта отправления: </label>
+    <select th:field="${transfer.cardFrom}" id="cardFrom">
+        <option th:each="card : ${cards}" th:value="${card.getId}" th:text="${card.getId} + ' Баланс: ' + ${card.getBalance}"></option>
+    </select>
+    <br>
+    <br>
+    <label for="cardTo">Карта получателя: </label>
+    <input th:type="text" th:field="${transfer.cardTo}" id="cardTo">
+    <br>
+    <br>
+    <label for="amount">Сумма перевода: </label>
+    <input th:type="text" th:field="${transfer.amount}" id="amount">
+    <input type="submit" value="Перевести">
+</form>
+
+</body>
+</html>

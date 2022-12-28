@@ -1,5 +1,7 @@
 package ru.tatarinov.banking.model;
 
+import org.springframework.context.annotation.Scope;
+
 import javax.persistence.*;
 
 @Entity

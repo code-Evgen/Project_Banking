@@ -20,7 +20,7 @@ public class CardController {
     @GetMapping("{id}")
     public String show(@PathVariable("id") int id, Model model){
         model.addAttribute("card",cardService.getCardById(id));
-        model.addAttribute("client", cardService.getClientIdByCardId(id));
+        model.addAttribute("client", cardService.getClientByCardId(id));
         return "/cards/show";
     }
 
@@ -36,8 +36,8 @@ public class CardController {
         return ("redirect:/cards/" + id);
     }
 
-    @PostMapping("/new/{id}")
-    public String addCard(@PathVariable("id") int id, @ModelAttribute("card") Card card){
+    @PostMapping("/new/{clientId}")
+    public String addCard(@PathVariable("clientId") int id, @ModelAttribute("card") Card card){
         System.out.println("qqq - " + card.getId());
         System.out.println("qqq - " + card.getBalance());
         cardService.createCard(id, card);

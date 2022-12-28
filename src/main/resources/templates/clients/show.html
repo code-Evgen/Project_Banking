@@ -13,9 +13,13 @@
             <a th:text="${cardId}" th:href="@{/cards/{id}(id=${cardId})}"/>
         </div>
     </div>
-    <hr/>
+    <br>
     <form th:method="post" th:action="@{/cards/new/{id}(id=${client.getId})}" th:object="${card}">
         <input type="submit" value="Добавить карту">
     </form>
+
+    <hr>
+    <br>
+    <a th:href="@{/clients/{id}/transfer(id=${client.getId})}">Сделать перевод</a>
 </body>
 </html>
