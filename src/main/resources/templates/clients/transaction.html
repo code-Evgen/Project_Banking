@@ -22,21 +22,22 @@
 <!--        <input type="submit" value="Перевести">-->
 <!--    </form>-->
 
-<form th:method="PATCH" th:action="@{/clients/{id}/transferConfirmation(id=${clientId})}">
+<form th:method="PATCH" th:action="@{/clients/{id}/transactionConfirmation(id=${clientId})}">
     <label for="cardFrom">Карта отправления: </label>
-    <select th:field="${transfer.cardFrom}" id="cardFrom">
+    <select th:field="${transaction.source}" id="cardFrom">
         <option th:each="card : ${cards}" th:value="${card.getId}" th:text="${card.getId} + ' Баланс: ' + ${card.getBalance}"></option>
     </select>
     <br>
     <br>
     <label for="cardTo">Карта получателя: </label>
-    <input th:type="text" th:field="${transfer.cardTo}" id="cardTo">
+    <input th:type="text" th:field="${transaction.destination}" id="cardTo">
     <br>
     <br>
     <label for="amount">Сумма перевода: </label>
-    <input th:type="text" th:field="${transfer.amount}" id="amount">
+    <input th:type="text" th:field="${transaction.amount}" id="amount">
     <input type="submit" value="Перевести">
 </form>
-
+    <br>
+    <a th:href="@{/clients/{id}(id=${clientId})}">Назад</a>
 </body>
 </html>

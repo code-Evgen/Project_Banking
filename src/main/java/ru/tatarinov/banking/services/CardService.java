@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tatarinov.banking.model.Card;
 import ru.tatarinov.banking.model.Client;
+import ru.tatarinov.banking.model.Transaction;
 import ru.tatarinov.banking.repositories.CardRepository;
-import ru.tatarinov.banking.repositories.ClientRepository;
 
 import java.util.*;
 
@@ -14,11 +14,13 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class CardService {
     private final CardRepository cardRepository;
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
+    private final TransactionService transactionService;
 
-    public CardService(CardRepository cardRepository, ClientRepository clientRepository) {
+    public CardService(CardRepository cardRepository, ClientService clientService, TransactionService transactionService) {
         this.cardRepository = cardRepository;
-        this.clientRepository = clientRepository;
+        this.clientService = clientService;
+        this.transactionService = transactionService;
     }
 
     public Card getCardById(int id){
@@ -26,10 +28,10 @@ public class CardService {
     }
 
     public List<Integer> getCardIdByClientId(int id){
-        Optional<Client> client = clientRepository.findById(id);
-        if (client.isPresent()){
-            Hibernate.initialize(client.get().getCards());
-            List<Card> cards = client.get().getCards();
+        Client client = clientService.getClientById(id);
+        if (client != null){
+            Hibernate.initialize(client.getCards());
+            List<Card> cards = client.getCards();
             List<Integer> cardsId = new ArrayList<>();
             for(Card card : cards){
                 cardsId.add(card.getId());
@@ -64,29 +66,34 @@ public class CardService {
     @Transactional
     public void createCard(int clientId, Card card){
         //card.setId(0);
-        Optional<Client> client = clientRepository.findById(clientId);
-        if (client.isPresent()){
-            card.setOwner(client.get());
+        Client client = clientService.getClientById(clientId);
+        if (client != null){
+            card.setOwner(client);
             System.out.println(card.getId());
             cardRepository.save(card);
         }
     }
 
-    public List<Card> getCardByClientId(int clientId){
-        Optional<Client> client = clientRepository.findById(clientId);
-        if (client.isPresent()){
-            return cardRepository.findAllByOwnerOrderById(client.get());
+    public List<Card> getCardsByClientId(int clientId){
+        Client client = clientService.getClientById(clientId);
+        if (client != null){
+            return cardRepository.findAllByOwnerOrderById(client);
         }
         return null;
     }
 
     @Transactional
-    public void proceedTransferring(int cardFromId, int cardToId, int amount){
-        Optional<Card> cardFrom = cardRepository.findById(cardFromId);
-        Optional<Card> cardTo = cardRepository.findById(cardToId);
+    public void proceedTransferring(Transaction transaction){
+        Card sourceCard = transaction.getSource();
+        Card destinationCard = transaction.getDestination();
+        Optional<Card> cardFrom = cardRepository.findById(sourceCard.getId());
+        Optional<Card> cardTo = cardRepository.findById(destinationCard.getId());
         if (cardFrom.isPresent() && cardTo.isPresent()){
-            cardFrom.get().setBalance(cardFrom.get().getBalance() - amount);
-            cardTo.get().setBalance(cardTo.get().getBalance() + amount);
+            cardFrom.get().setBalance(cardFrom.get().getBalance() - transaction.getAmount());
+            cardTo.get().setBalance(cardTo.get().getBalance() + transaction.getAmount());
+
+            transaction.setTimestamp(new Date());
+            transactionService.saveTransaction(transaction);
         }
     }
 

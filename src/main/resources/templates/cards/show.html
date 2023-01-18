@@ -8,10 +8,13 @@
     <div th:text="'Счет: ' + ${card.getId}"/>
     <div th:text="'Баланс: ' + ${card.getBalance}"/>
     <br>
-    <form method="GET" th:action="@{/cards/{id}/addMoney(id=${card.getId})}">
-        <input type="submit" value="Пополнить счет">
-    </form>
+    <a th:href="@{/cards/{id}/addMoney(id=${card.getId})}">Пополнить счет</a>
 
+    <br>
+    <br>
+    <a th:href="@{/cards/{id}/history(id=${card.getId})}">История переводов</a>
+
+    <br>
     <br>
     <a th:href="@{/clients/{id}(id=${client.getId})}">Назад</a>
 </body>

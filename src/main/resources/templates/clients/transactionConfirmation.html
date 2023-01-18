@@ -5,20 +5,23 @@
     <title>Подтверждение перевода денег</title>
 </head>
 <body>
-    <form th:method="PATCH" th:action="@{/clients/{id}/transferProceeding(id=${clientId})}">
-        <div th:text="'Перевод со счета: ' + ${transfer.cardFrom}" ></div>
-        <input th:type="hidden" th:field="${transfer.cardFrom}" >
+    <form th:method="PATCH" th:action="@{/clients/{id}/transactionProceeding(id=${clientId})}">
+        <div th:text="'Перевод со счета: ' + ${transaction.source.id}" ></div>
+        <input th:type="hidden" th:field="${transaction.source.id}" >
 
-        <div th:text="'Перевод на счет: ' + ${transfer.cardTo}"></div>
-        <input th:type="hidden" th:field="${transfer.cardTo}">
+        <div th:text="'Перевод на счет: ' + ${transaction.destination.id}"></div>
+        <input th:type="hidden" th:field="${transaction.destination.id}">
 
         <div th:text="'Получатель перевода: ' + ${client.name}"></div>
         <input th:type="hidden" th:field="${client.name}">
 
-        <div th:text="'Сумма перевода: ' + ${transfer.amount}"></div>
-        <input th:type="hidden" th:field="${transfer.amount}">
+        <div th:text="'Сумма перевода: ' + ${transaction.amount}"></div>
+        <input th:type="hidden" th:field="${transaction.amount}">
 
         <input type="submit" value="Подтвердить перевод">
+        <br>
+        <br>
+        <a th:href="@{/clients/{id}/transaction(id=${clientId})}">Назад</a>
     </form>
 </body>
 </html>

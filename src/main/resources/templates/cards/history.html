@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Transactions history</title>
 </head>
 <body>
-$END$
+    <div th:text="'История переводов с карты ' + ${cardId}"/>
+    <br>
+    <div th:each="transaction : ${transactions}">
+        <div th:text="'Карта получателя: ' + ${transaction.destination.id}"/>
+        <div th:text="'Сумма перевода: ' + ${transaction.amount}"/>
+        <div th:text="'Дата перевода: ' + ${transaction.timestamp}"/>
+        <br>
+    </div>
 </body>
 </html>

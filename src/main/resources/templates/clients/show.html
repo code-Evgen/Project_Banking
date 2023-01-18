@@ -20,6 +20,10 @@
 
     <hr>
     <br>
-    <a th:href="@{/clients/{id}/transfer(id=${client.getId})}">Сделать перевод</a>
+    <a th:href="@{/clients/{id}/transaction(id=${client.getId})}">Сделать перевод</a>
+    <hr>
+    <br>
+    <a th:href="@{/auth/logout}">Выйти</a>
+
 </body>
 </html>

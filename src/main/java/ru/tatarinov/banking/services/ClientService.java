@@ -7,6 +7,8 @@ import ru.tatarinov.banking.model.Card;
 import ru.tatarinov.banking.model.Client;
 import ru.tatarinov.banking.repositories.ClientRepository;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 public class ClientService {
@@ -21,5 +23,14 @@ public class ClientService {
         return clientRepository.findById(id).orElse(null);
     }
 
+    public Optional<Client> getClientByLogin(String login){
+        return clientRepository.getClientByLogin(login);
+    }
+
+    @Transactional
+    public void createUser(Client client){
+        client.setRole("ROLE_USER");
+        clientRepository.save(client);
+    }
 
 }
