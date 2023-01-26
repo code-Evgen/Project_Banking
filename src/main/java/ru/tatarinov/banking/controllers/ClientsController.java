@@ -4,23 +4,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.tatarinov.banking.Security.ClientDetails;
 import ru.tatarinov.banking.model.Card;
 import ru.tatarinov.banking.model.Transaction;
 import ru.tatarinov.banking.services.CardService;
 import ru.tatarinov.banking.services.ClientService;
+import ru.tatarinov.banking.util.TransactionValidator;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/clients")
 public class ClientsController {
     private final ClientService clientService;
     private final CardService cardService;
+    private final TransactionValidator transactionValidator;
 
     @Autowired
-    public ClientsController(ClientService clientService, CardService cardService) {
+    public ClientsController(ClientService clientService, CardService cardService, TransactionValidator transactionValidator) {
         this.clientService = clientService;
         this.cardService = cardService;
+        this.transactionValidator = transactionValidator;
     }
 
     @GetMapping("/default")
@@ -46,7 +52,12 @@ public class ClientsController {
     }
 
     @PatchMapping("/{clientId}/transactionConfirmation")
-    public String transferConfirmation(@PathVariable("clientId") int clientId, @ModelAttribute("transaction") Transaction transaction, Model model){
+    public String transferConfirmation(@PathVariable("clientId") int clientId, @ModelAttribute("transaction") @Valid Transaction transaction, BindingResult bindingResult, Model model) {
+        transactionValidator.validate(transaction, bindingResult);
+        if (bindingResult.hasErrors()){
+            model.addAttribute("cards",cardService.getCardsByClientId(clientId));
+            return ("clients/transaction");
+        }
         model.addAttribute("client", cardService.getClientByCardId(transaction.getDestination().getId()));
         return "clients/transactionConfirmation";
     }

@@ -3,12 +3,15 @@ package ru.tatarinov.banking.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.tatarinov.banking.model.Card;
+import ru.tatarinov.banking.model.Transaction;
 import ru.tatarinov.banking.services.CardService;
 import ru.tatarinov.banking.services.TransactionService;
+import ru.tatarinov.banking.util.RefillValidator;
 
-import java.sql.Time;
+import javax.validation.Valid;
 import java.util.Date;
 
 @Controller
@@ -16,11 +19,13 @@ import java.util.Date;
 public class CardController {
     private final CardService cardService;
     private final TransactionService transactionService;
+    private final RefillValidator refillValidator;
 
     @Autowired
-    public CardController(CardService cardService, TransactionService transactionService) {
+    public CardController(CardService cardService, TransactionService transactionService, RefillValidator refillValidator) {
         this.cardService = cardService;
         this.transactionService = transactionService;
+        this.refillValidator = refillValidator;
     }
 
     @GetMapping("/{id}")
@@ -31,14 +36,20 @@ public class CardController {
     }
 
     @GetMapping("/{id}/addMoney")
-    public String addMoney(@PathVariable("id") int id, Model model){
+    public String addMoney(@PathVariable("id") int id, Model model, @ModelAttribute("transaction") Transaction transaction){
         model.addAttribute("card", cardService.getCardById(id));
         return "/cards/addMoney";
     }
 
     @PatchMapping("/{id}")
-    public String refill(@PathVariable("id") int id, @RequestParam("addingAmount") float amount){
-        cardService.refill(id, amount);
+    public String refill(@PathVariable("id") int id, @ModelAttribute("transaction") @Valid Transaction transaction, BindingResult bindingResult, Model model){
+        refillValidator.validate(transaction, bindingResult);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("card", cardService.getCardById(id));
+            return "/cards/addMoney";
+        }
+
+        cardService.refill(id, transaction.getAmount());
         return ("redirect:/cards/" + id);
     }
 

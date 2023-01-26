@@ -26,7 +26,8 @@ public class TransactionService {
 
     public List<Transaction> getTransactionsByCard(Card sourceCard){
         if (sourceCard != null) {
-            return transactionRepository.findAllBySourceOrderByTimestamp(sourceCard);
+//            return transactionRepository.findAllBySourceOrderByTimestamp(sourceCard);
+            return transactionRepository.findAllBySourceOrDestinationOrderByTimestamp(sourceCard, sourceCard);
         }
         return null;
     }

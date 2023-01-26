@@ -5,13 +5,16 @@
     <title>Transactions history</title>
 </head>
 <body>
-    <div th:text="'История переводов с карты ' + ${cardId}"/>
+    <div th:text="'История переводов карты ' + ${cardId}"/>
     <br>
     <div th:each="transaction : ${transactions}">
+        <div th:text="'Карта отправителя: ' + ${transaction.source.id}"/>
         <div th:text="'Карта получателя: ' + ${transaction.destination.id}"/>
         <div th:text="'Сумма перевода: ' + ${transaction.amount}"/>
         <div th:text="'Дата перевода: ' + ${transaction.timestamp}"/>
         <br>
     </div>
+    <br>
+    <a th:href="@{/cards/{id}(id=${cardId})}">Назад</a>
 </body>
 </html>

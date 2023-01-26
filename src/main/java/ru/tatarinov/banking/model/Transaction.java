@@ -1,6 +1,7 @@
 package ru.tatarinov.banking.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 @Entity
@@ -20,6 +21,7 @@ public class Transaction {
     private Card destination;
 
     @Column(name = "amount")
+//    @Min(value = 0, message = "Сумма должна быть больше 0")
     private float amount;
 
     @Column(name = "time")

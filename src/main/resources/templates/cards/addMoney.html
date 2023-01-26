@@ -6,13 +6,19 @@
 </head>
 <body>
     <div th:text="'Счет: ' + ${card.getId}"/>
+    <br>
     <div th:text="'Текущий баланс: ' + ${card.getBalance}"/>
+    <br>
 
-    <form th:method="PATCH" th:action="@{/cards/{id}(id=${card.getId})}">
+    <form th:method="PATCH" th:action="@{/cards/{id}(id=${card.getId})}" th:object="${transaction}">
         <label for="addingAmount">Сумма пополнения</label>
-        <input type="text" id="addingAmount" name="addingAmount">
+        <input th:type="text" th:field="*{amount}" id="addingAmount">
+        <div style="color: red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">adding error</div>
+        <br>
         <input type="submit" value="Пополнить">
     </form>
+    <br>
+    <a th:href="@{/cards/{id}(id=${card.getId})}">Назад</a>
 
 </body>
 </html>

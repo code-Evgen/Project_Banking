@@ -13,6 +13,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     List<Transaction> findAllBySourceOrderByTimestamp(Card source);
 
+    List<Transaction> findAllBySourceOrDestinationOrderByTimestamp(Card source, Card destination);
+
     List<Transaction> findAllBySourceAndDestinationOrderByTimestamp(Card source, Card destination);
 
     List<Transaction> findAllBySourceAndAmountAfter(Card source, Float amount);

@@ -22,19 +22,23 @@
 <!--        <input type="submit" value="Перевести">-->
 <!--    </form>-->
 
-<form th:method="PATCH" th:action="@{/clients/{id}/transactionConfirmation(id=${clientId})}">
+<form th:method="PATCH" th:action="@{/clients/{id}/transactionConfirmation(id=${clientId})}" th:object="${transaction}">
     <label for="cardFrom">Карта отправления: </label>
-    <select th:field="${transaction.source}" id="cardFrom">
+    <select th:field="*{source}" id="cardFrom">
         <option th:each="card : ${cards}" th:value="${card.getId}" th:text="${card.getId} + ' Баланс: ' + ${card.getBalance}"></option>
     </select>
+    <div style="color: red" th:if="${#fields.hasErrors('source')}" th:errors="*{source}">source error</div>
     <br>
     <br>
     <label for="cardTo">Карта получателя: </label>
-    <input th:type="text" th:field="${transaction.destination}" id="cardTo">
+    <input th:type="text" th:field="*{destination}" id="cardTo">
+    <div style="color: red" th:if="${#fields.hasErrors('destination')}" th:errors="*{destination}">destination error</div>
     <br>
     <br>
     <label for="amount">Сумма перевода: </label>
-    <input th:type="text" th:field="${transaction.amount}" id="amount">
+    <input th:type="text" th:field="*{amount}" id="amount">
+    <div style="color: red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount error</div>
+    <br>
     <input type="submit" value="Перевести">
 </form>
     <br>

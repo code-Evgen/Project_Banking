@@ -14,7 +14,7 @@
 
         <label th:for="login">Login: </label>
         <input th:type="text" th:field="*{login}" th:id="login">
-        <div style="color: red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Name error</div>
+        <div style="color: red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login error</div>
         <br>
         <br>
 
