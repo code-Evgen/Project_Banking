@@ -52,26 +52,25 @@ public class CardService {
     }
 
     @Transactional
-    public void refill(int id, float amount){
+    public boolean refill(int id, float amount){
         Card card = cardRepository.findById(id).orElse(null);
-        System.out.println(card.getId());
-        if (card != null){
-            System.out.println(card.getBalance());
-            card.setBalance(card.getBalance() + amount);
-            System.out.println(card.getBalance());
+        if (card == null) {
+            return false;
         }
+        card.setBalance(card.getBalance() + amount);
         cardRepository.save(card);
+        return true;
     }
 
     @Transactional
-    public void createCard(int clientId, Card card){
-        //card.setId(0);
+    public boolean createCard(int clientId, Card card){
         Client client = clientService.getClientById(clientId);
         if (client != null){
             card.setOwner(client);
-            System.out.println(card.getId());
             cardRepository.save(card);
+            return true;
         }
+        return false;
     }
 
     public List<Card> getCardsByClientId(int clientId){
@@ -83,7 +82,7 @@ public class CardService {
     }
 
     @Transactional
-    public void proceedTransferring(Transaction transaction){
+    public boolean proceedTransferring(Transaction transaction){
         Card sourceCard = transaction.getSource();
         Card destinationCard = transaction.getDestination();
         Optional<Card> cardFrom = cardRepository.findById(sourceCard.getId());
@@ -94,7 +93,9 @@ public class CardService {
 
             transaction.setTimestamp(new Date());
             transactionService.saveTransaction(transaction);
+            return true;
         }
+        return false;
     }
 
 }

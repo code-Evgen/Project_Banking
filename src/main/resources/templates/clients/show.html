@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Кабинет клиента</title>
 </head>
 <body>
-    <p th:text="'Клиент: ' + ${client.getName}"></p>
+    <p th:id="username" th:text="'Клиент: ' + ${client.getName}"></p>
     <div>Карты:</div>
     <div th:if="${cardsId.isEmpty()}">Оформленных карт нет</div>
-    <div th:if="${!cardsId.isEmpty()}">
-        <div th:each="cardId : ${cardsId}">
+    <div th:if="${!cardsId.isEmpty()}" id="cardList">
+        <div th:each="cardId : ${cardsId}" data-th-id="${cardId}">
             <a th:text="${cardId}" th:href="@{/cards/{id}(id=${cardId})}"/>
         </div>
     </div>
-    <br>
+    <br/>
     <form th:method="post" th:action="@{/cards/new/{id}(id=${client.getId})}" th:object="${card}">
-        <input type="submit" value="Добавить карту">
+        <input type="submit" value="Добавить карту"/>
     </form>
 
-    <hr>
-    <br>
+    <hr/>
+    <br/>
     <a th:href="@{/clients/{id}/transaction(id=${client.getId})}">Сделать перевод</a>
-    <hr>
-    <br>
+    <hr/>
+    <br/>
     <a th:href="@{/auth/logout}">Выйти</a>
-
 </body>
 </html>

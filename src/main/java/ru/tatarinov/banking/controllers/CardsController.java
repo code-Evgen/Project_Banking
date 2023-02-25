@@ -16,13 +16,13 @@ import java.util.Date;
 
 @Controller
 @RequestMapping(value = "/cards")
-public class CardController {
+public class CardsController {
     private final CardService cardService;
     private final TransactionService transactionService;
     private final RefillValidator refillValidator;
 
     @Autowired
-    public CardController(CardService cardService, TransactionService transactionService, RefillValidator refillValidator) {
+    public CardsController(CardService cardService, TransactionService transactionService, RefillValidator refillValidator) {
         this.cardService = cardService;
         this.transactionService = transactionService;
         this.refillValidator = refillValidator;
@@ -55,8 +55,6 @@ public class CardController {
 
     @PostMapping("/new/{clientId}")
     public String addCard(@PathVariable("clientId") int id, @ModelAttribute("card") Card card){
-        System.out.println("qqq - " + card.getId());
-        System.out.println("qqq - " + card.getBalance());
         cardService.createCard(id, card);
         return ("redirect:/clients/" + id);
     }

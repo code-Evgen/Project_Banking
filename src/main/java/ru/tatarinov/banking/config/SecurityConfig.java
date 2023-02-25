@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()		//пускать неавторизованных на страницу логина и страницу ошибки
                 .antMatchers("/clients/default").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/clients/{userId}").access("@webSecurity.checkUserId(authentication,#userId)")
+                .antMatchers("/cards/new/{userId}").access("@webSecurity.checkUserId(authentication,#userId)")
                 .antMatchers("/cards/{cardId}/**").access("@webSecurity.checkCardId(authentication,#cardId)")
                 .anyRequest().authenticated()							//для всех остальных запросов должен быть аутентифицирован
             .and()

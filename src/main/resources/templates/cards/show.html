@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Детали счета</title>
 </head>
 <body>
-    <div th:text="'Счет: ' + ${card.getId}"/>
+    <div th:text="'Счет: ' + ${card.getId}" th:id="card-id"/>
     <div th:text="'Баланс: ' + ${card.getBalance}"/>
-    <br>
+    <br/>
     <a th:href="@{/cards/{id}/addMoney(id=${card.getId})}">Пополнить счет</a>
 
-    <br>
-    <br>
+    <br/>
+    <br/>
     <a th:href="@{/cards/{id}/history(id=${card.getId})}">История переводов</a>
 
-    <br>
-    <br>
+    <br/>
+    <br/>
     <a th:href="@{/clients/{id}(id=${client.getId})}">Назад</a>
 </body>
 </html>
